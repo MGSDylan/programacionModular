@@ -6,6 +6,7 @@ import { throwError, zip } from 'rxjs';
 import { Product, CreateProductDTO, UpdateProductDTO } from './../models/product.model';
 import { checkTime } from './../interceptors/time.interceptor';
 import { environment } from './../../environments/environment';
+import { Category } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -71,5 +72,14 @@ export class ProductsService {
 
   delete(id: string) {
     return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
+  }
+
+  getById(id:string,limit?: number, offset?: number) {
+    let params = new HttpParams();
+    if (limit && offset) {
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+    }
+    return this.http.get<Product[]>(`${environment.API_URL}/api/categories/`+id+'/products', { params });
   }
 }
